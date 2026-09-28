@@ -18,6 +18,7 @@ export default function TicketTrack() {
   const [notifOn, setNotifOn] = useState(notificationsGranted());
   const [dismissedCall, setDismissedCall] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [shared, setShared] = useState(false);
 
   // Nombre de personnes devant au premier affichage : base de la barre de progression.
   const initialAhead = useRef<number | null>(null);
@@ -96,6 +97,24 @@ export default function TicketTrack() {
     };
   }, []);
 
+  /** Partage natif sur mobile (WhatsApp, SMS, notes…), sinon copie du lien dans le presse-papiers. */
+  async function share() {
+    if (!ticket) return;
+    const url = window.location.href;
+    const text = `Mon ticket ${ticket.code} (${ticket.branchName}) — code de suivi ${ticket.recoveryCode}`;
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: `Ticket ${ticket.code}`, text, url });
+        return;
+      }
+      await navigator.clipboard.writeText(`${text}\n${url}`);
+      setShared(true);
+      window.setTimeout(() => setShared(false), 2500);
+    } catch {
+      /* partage annulé par l'utilisateur */
+    }
+  }
+
   async function enableNotifications() {
     setNotifOn(await requestNotifications());
   }
@@ -159,6 +178,11 @@ export default function TicketTrack() {
           <div className="label">Votre ticket</div>
           <div className="ticket-code">{ticket.code}</div>
           <div className="ticket-service">{ticket.serviceName}</div>
+          {ticket.recoveryCode && ["WAITING", "CALLED", "SERVING"].includes(ticket.status) && (
+            <div className="recovery-code" title="Avec le numéro, ce code permet de retrouver votre ticket depuis un autre téléphone">
+              Code de suivi <strong>{ticket.recoveryCode}</strong>
+            </div>
+          )}
         </div>
         <div className="ticket-tear" />
         <div className="ticket-body">
@@ -238,9 +262,18 @@ export default function TicketTrack() {
           </div>
         )}
         {ticket.status === "WAITING" && (
-          <button className="btn btn-ghost" onClick={cancel} disabled={busy}>
-            Annuler mon ticket
-          </button>
+          <>
+            <button className="btn btn-ghost" onClick={share}>
+              {shared ? "Lien copié ✓" : "Partager / copier le lien de suivi"}
+            </button>
+            <p className="small muted" style={{ textAlign: "center", margin: 0 }}>
+              Page fermée par erreur ? Rescannez le QR code de l'accueil, ou utilisez « J'ai déjà un ticket » avec votre numéro et le
+              code de suivi. Astuce : faites une capture d'écran de ce ticket.
+            </p>
+            <button className="btn btn-ghost" onClick={cancel} disabled={busy}>
+              Annuler mon ticket
+            </button>
+          </>
         )}
         {["NO_SHOW", "CANCELLED", "EXPIRED", "DONE"].includes(ticket.status) && (
           <Link className="btn btn-primary btn-lg" to={`/q/${ticket.branchCode}`}>

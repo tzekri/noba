@@ -4,6 +4,7 @@ import { useAuth } from "../../auth";
 import { formatTime, formatWait, minutesSince, StaffHeader, staffLinks, StatusBadge } from "../../components/common";
 import { useBranchStream } from "../../realtime";
 import type { AgentTicket, BoardView, BranchSummary } from "../../types";
+import IssueTicketModal from "./IssueTicketModal";
 import "./agent.css";
 
 const COUNTER_KEY = "noba.agent.counter";
@@ -26,6 +27,7 @@ export default function AgentDesk() {
   const [info, setInfo] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [transferOpen, setTransferOpen] = useState(false);
+  const [issuing, setIssuing] = useState(false);
   const [, setTick] = useState(0);
 
   useEffect(() => {
@@ -126,6 +128,11 @@ export default function AgentDesk() {
               )}
             </div>
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+              {board && (
+                <button className="btn btn-ghost" onClick={() => setIssuing(true)} title="Pour un client sans smartphone">
+                  + Nouveau ticket
+                </button>
+              )}
               {branches.length > 1 && (
                 <select className="select" value={branchId ?? ""} onChange={(e) => { setBranchId(Number(e.target.value)); setCounterId(null); }}>
                   {branches.map((b) => (
@@ -338,6 +345,7 @@ export default function AgentDesk() {
           )}
         </div>
       </main>
+      {issuing && board && <IssueTicketModal branchId={board.branch.id} services={board.services} onClose={() => setIssuing(false)} />}
     </>
   );
 }

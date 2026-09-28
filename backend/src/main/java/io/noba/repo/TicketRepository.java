@@ -18,6 +18,8 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
 	Optional<Ticket> findByPublicToken(String publicToken);
 
+	Optional<Ticket> findByBranchIdAndDayAndCode(Long branchId, LocalDate day, String code);
+
 	/** Personnes devant ce ticket dans la même file. */
 	@Query("select count(t) from Ticket t where t.service.id = :serviceId and t.day = :day "
 			+ "and t.status = io.noba.domain.TicketStatus.WAITING and t.queuedAt < :queuedAt")

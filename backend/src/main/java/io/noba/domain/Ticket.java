@@ -1,6 +1,7 @@
 package io.noba.domain;
 
 import jakarta.persistence.*;
+import java.security.SecureRandom;
 import java.time.Instant;
 import java.time.LocalDate;
 
@@ -65,6 +66,19 @@ public class Ticket {
 	/** Satisfaction 1..5, saisie par le client après son passage. */
 	private Integer rating;
 
+	/**
+	 * Code à 4 chiffres imprimé / affiché sur le ticket : avec le numéro, il permet de retrouver
+	 * la page de suivi depuis un autre appareil (tentatives limitées, voir RecoveryThrottle).
+	 */
+	@Column(length = 4)
+	private String recoveryCode;
+
+	/** Agent qui a délivré le ticket au guichet (client sans smartphone) ; null si pris par QR code. */
+	@ManyToOne(fetch = FetchType.LAZY)
+	private StaffUser issuedBy;
+
+	private static final SecureRandom RANDOM = new SecureRandom();
+
 	protected Ticket() {
 	}
 
@@ -77,6 +91,7 @@ public class Ticket {
 		this.publicToken = publicToken;
 		this.createdAt = now;
 		this.queuedAt = now;
+		this.recoveryCode = String.format("%04d", RANDOM.nextInt(10_000));
 	}
 
 	public Long getId() { return id; }
@@ -105,4 +120,7 @@ public class Ticket {
 	public void setRecallCount(int recallCount) { this.recallCount = recallCount; }
 	public Integer getRating() { return rating; }
 	public void setRating(Integer rating) { this.rating = rating; }
+	public String getRecoveryCode() { return recoveryCode; }
+	public StaffUser getIssuedBy() { return issuedBy; }
+	public void setIssuedBy(StaffUser issuedBy) { this.issuedBy = issuedBy; }
 }

@@ -3,7 +3,10 @@ package io.noba.web.dto;
 import io.noba.domain.TicketStatus;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import java.time.Instant;
 import java.util.List;
 
@@ -25,11 +28,18 @@ public final class PublicDtos {
 	}
 
 	/**
-	 * @param peopleAhead personnes devant le client (null si le ticket n'est plus en attente)
+	 * @param peopleAhead  personnes devant le client (null si le ticket n'est plus en attente)
+	 * @param recoveryCode code à 4 chiffres pour retrouver le ticket depuis un autre appareil
 	 */
 	public record TicketView(String token, String code, TicketStatus status, String serviceName,
 			String branchName, String branchCode, String organizationName, Integer peopleAhead,
-			Integer estimatedWaitMinutes, String counterName, Instant createdAt, Instant calledAt, Integer rating) {
+			Integer estimatedWaitMinutes, String counterName, Instant createdAt, Instant calledAt, Integer rating,
+			String recoveryCode) {
+	}
+
+	/** « J'ai déjà un ticket » : numéro affiché (B-042, b42…) + code de récupération. */
+	public record RecoverRequest(@NotBlank @Size(max = 10) String ticketCode,
+			@NotBlank @Pattern(regexp = "\\d{4}", message = "4 chiffres") String recoveryCode) {
 	}
 
 	public record RatingRequest(@Min(1) @Max(5) int score) {

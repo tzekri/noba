@@ -37,6 +37,8 @@ export interface TicketView {
   createdAt: string;
   calledAt?: string;
   rating?: number;
+  /** Code à 4 chiffres pour retrouver le ticket depuis un autre appareil. */
+  recoveryCode?: string;
 }
 
 export interface CalledTicket {

@@ -2,6 +2,10 @@ package io.noba.web;
 
 import io.noba.security.CurrentUser;
 import io.noba.service.CounterDeskService;
+import io.noba.service.TicketingService;
+import io.noba.web.dto.PublicDtos.TakeTicketRequest;
+import io.noba.web.dto.PublicDtos.TicketView;
+import org.springframework.http.HttpStatus;
 import io.noba.web.dto.AgentDtos.AgentTicket;
 import io.noba.web.dto.AgentDtos.BoardView;
 import io.noba.web.dto.AgentDtos.BranchSummary;
@@ -17,9 +21,18 @@ import org.springframework.web.bind.annotation.*;
 public class AgentController {
 
 	private final CounterDeskService desk;
+	private final TicketingService ticketing;
 
-	public AgentController(CounterDeskService desk) {
+	public AgentController(CounterDeskService desk, TicketingService ticketing) {
 		this.desk = desk;
+		this.ticketing = ticketing;
+	}
+
+	/** Ticket délivré au guichet pour un client sans smartphone (à imprimer ou à annoncer). */
+	@PostMapping("/branches/{id}/tickets")
+	@ResponseStatus(HttpStatus.CREATED)
+	public TicketView issue(@PathVariable Long id, @Valid @RequestBody TakeTicketRequest request) {
+		return ticketing.issueAtCounter(CurrentUser.get(), id, request.serviceId());
 	}
 
 	@GetMapping("/branches")

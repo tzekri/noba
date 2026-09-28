@@ -5,8 +5,10 @@ import io.noba.service.TicketingService;
 import io.noba.web.dto.PublicDtos.BranchPublicView;
 import io.noba.web.dto.PublicDtos.DisplayView;
 import io.noba.web.dto.PublicDtos.RatingRequest;
+import io.noba.web.dto.PublicDtos.RecoverRequest;
 import io.noba.web.dto.PublicDtos.TakeTicketRequest;
 import io.noba.web.dto.PublicDtos.TicketView;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import java.util.Map;
@@ -37,6 +39,13 @@ public class PublicController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public TicketView take(@PathVariable String code, @Valid @RequestBody TakeTicketRequest request) {
 		return ticketing.take(code, request.serviceId());
+	}
+
+	/** « J'ai déjà un ticket » : retrouve le suivi à partir du numéro et du code de récupération. */
+	@PostMapping("/branches/{code}/tickets/recover")
+	public TicketView recover(@PathVariable String code, @Valid @RequestBody RecoverRequest request,
+			HttpServletRequest http) {
+		return ticketing.recover(code, request.ticketCode(), request.recoveryCode(), http.getRemoteAddr());
 	}
 
 	@GetMapping("/branches/{code}/display")

@@ -115,3 +115,59 @@
     font-size: 60px;
   }
 }
+
+/* ---------- Délivrance d'un ticket au guichet ---------- */
+.issue-services {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.issue-service {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.issue-service:hover:not(:disabled) {
+  border-color: var(--brand);
+  background: var(--brand-soft);
+}
+
+.issued {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+  padding: 8px 0 4px;
+}
+
+.issued-code {
+  font-size: 64px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.issued-recovery {
+  margin: 10px 0 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--bg);
+  font-size: 13px;
+  color: var(--ink-2);
+}
+
+.issued-recovery strong {
+  font-size: 18px;
+  letter-spacing: 0.18em;
+  color: var(--ink);
+}
