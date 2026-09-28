@@ -1,0 +1,346 @@
+/* Écrans client : pensés d'abord pour le téléphone. */
+.client {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 0 16px calc(24px + env(safe-area-inset-bottom));
+}
+
+.client-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+}
+
+.client-branch {
+  margin: 8px 0 20px;
+}
+
+.client-branch .org {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--brand);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.client-branch h1 {
+  font-size: 26px;
+  margin: 2px 0 4px;
+}
+
+.service-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.service-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  text-align: left;
+  background: #fff;
+  border: 2px solid transparent;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  transition:
+    border-color 0.15s,
+    transform 0.1s;
+}
+
+.service-card:hover:not(:disabled) {
+  border-color: var(--brand);
+}
+
+.service-card:active:not(:disabled) {
+  transform: scale(0.99);
+}
+
+.service-card:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.service-card.selected {
+  border-color: var(--brand);
+  background: var(--brand-soft);
+}
+
+.service-prefix {
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--brand-soft);
+  color: var(--brand);
+  font-weight: 800;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.service-card .body {
+  flex: 1;
+  min-width: 0;
+}
+
+.service-card .name {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.service-card .desc {
+  font-size: 13px;
+  color: var(--ink-3);
+}
+
+.service-card .meta {
+  text-align: right;
+  font-size: 13px;
+  color: var(--ink-2);
+  flex: none;
+}
+
+.service-card .meta strong {
+  display: block;
+  font-size: 18px;
+  color: var(--ink);
+}
+
+.client-footer {
+  margin-top: auto;
+  padding-top: 24px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--ink-3);
+}
+
+.sticky-cta {
+  position: sticky;
+  bottom: 0;
+  padding: 16px 0 8px;
+  background: linear-gradient(transparent, var(--bg) 30%);
+}
+
+/* ---------- Ticket ---------- */
+.ticket {
+  background: #fff;
+  border-radius: 22px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  position: relative;
+}
+
+.ticket-head {
+  padding: 22px 22px 18px;
+  text-align: center;
+}
+
+.ticket-head .label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-3);
+  font-weight: 700;
+}
+
+.ticket-code {
+  font-size: 68px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  margin: 4px 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.ticket-service {
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+/* Découpe façon ticket de caisse */
+.ticket-tear {
+  position: relative;
+  height: 0;
+  border-top: 2px dashed var(--line);
+  margin: 0 18px;
+}
+
+.ticket-tear::before,
+.ticket-tear::after {
+  content: "";
+  position: absolute;
+  top: -13px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--bg);
+}
+
+.ticket-tear::before {
+  left: -30px;
+}
+
+.ticket-tear::after {
+  right: -30px;
+}
+
+.ticket-body {
+  padding: 20px 22px 24px;
+}
+
+.ahead {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 10px;
+}
+
+.ahead .n {
+  font-size: 56px;
+  font-weight: 800;
+  color: var(--brand);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.ahead .t {
+  font-size: 16px;
+  color: var(--ink-2);
+  font-weight: 600;
+}
+
+.progress {
+  height: 10px;
+  background: #eef1ef;
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 18px 0 10px;
+}
+
+.progress > div {
+  height: 100%;
+  background: linear-gradient(90deg, var(--brand), #14b8a6);
+  border-radius: 999px;
+  transition: width 0.6s ease;
+}
+
+.ticket-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.ticket-stats > div {
+  background: var(--bg);
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+
+.ticket-stats .k {
+  font-size: 12px;
+  color: var(--ink-3);
+}
+
+.ticket-stats .v {
+  font-weight: 700;
+  font-size: 17px;
+}
+
+/* État « C'est votre tour » : tout l'écran change de couleur */
+.called-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: var(--accent);
+  color: #1f1500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px;
+  animation: flash 1.2s ease-in-out 3;
+}
+
+.called-screen.serving {
+  background: var(--brand);
+  color: #fff;
+  animation: none;
+}
+
+@keyframes flash {
+  50% {
+    filter: brightness(1.15);
+  }
+}
+
+.called-screen .big {
+  font-size: 30px;
+  font-weight: 800;
+}
+
+.called-screen .code {
+  font-size: 96px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin: 12px 0;
+}
+
+.called-screen .counter {
+  font-size: 34px;
+  font-weight: 800;
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 16px;
+  padding: 10px 22px;
+  margin-top: 8px;
+}
+
+.stars {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.stars button {
+  background: none;
+  border: none;
+  font-size: 38px;
+  cursor: pointer;
+  color: #d4dbd9;
+  padding: 0;
+  line-height: 1;
+}
+
+.stars button.on {
+  color: var(--accent);
+}
+
+.client-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.live {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--ink-3);
+}
