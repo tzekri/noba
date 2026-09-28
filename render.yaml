@@ -1,0 +1,53 @@
+# Blueprint Render : crée la base PostgreSQL et le service web en une fois.
+# Render → New → Blueprint → choisir ce dépôt.
+# Doc : https://render.com/docs/blueprint-spec
+
+databases:
+  - name: noba-db
+    plan: free
+    databaseName: noba
+    user: noba
+
+services:
+  - type: web
+    name: noba
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/public/health
+    autoDeploy: true
+    envVars:
+      - key: DB_HOST
+        fromDatabase:
+          name: noba-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: noba-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: noba-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: noba-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: noba-db
+          property: password
+      # Secret de signature des jetons, généré aléatoirement par Render.
+      - key: JWT_SECRET
+        generateValue: true
+      # Compte opérateur de la plateforme : Render les demande à la création (non stockés dans Git).
+      - key: SUPER_ADMIN_EMAIL
+        sync: false
+      - key: SUPER_ADMIN_PASSWORD
+        sync: false
+      # Organisation de démonstration (« Banque Démo », établissement /q/demo). Mettre "false" en production.
+      - key: SEED_DEMO
+        value: "true"
+      - key: APP_TIMEZONE
+        value: Africa/Casablanca

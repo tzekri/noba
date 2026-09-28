@@ -26,6 +26,30 @@ Avec Docker : `docker compose up --build` (PostgreSQL + backend), puis `npm run 
 
 Pour tester sur un vrai téléphone : même Wi-Fi que le PC, puis ouvrez `http://<ip-du-pc>:5174/q/demo`.
 
+## Déployer sur Render
+
+Le `Dockerfile` à la racine construit une **image unique** : le frontend React est compilé puis embarqué
+dans le jar Spring Boot, qui sert tout sur le même domaine (pas de CORS, flux SSE direct).
+Le fichier `render.yaml` décrit l'infrastructure.
+
+1. Pousser le dépôt sur GitHub ou GitLab.
+2. Render → **New → Blueprint** → choisir le dépôt. Render crée :
+   - `noba-db` : PostgreSQL ;
+   - `noba` : Web Service Docker, relié à la base.
+3. Renseigner les deux valeurs demandées : `SUPER_ADMIN_EMAIL` et `SUPER_ADMIN_PASSWORD`.
+4. Attendre la fin du build (quelques minutes), puis ouvrir `https://<service>.onrender.com`.
+
+Variables utiles :
+
+| Variable | Rôle |
+|---|---|
+| `JWT_SECRET` | Générée par Render |
+| `SEED_DEMO` | `true` crée « Banque Démo » (`/q/demo`). **Mettre `false` pour de vrais clients** : les comptes de démo ont des mots de passe publics |
+| `APP_TIMEZONE` | Fuseau de la « journée » des tickets (`Africa/Casablanca`) |
+
+Offre gratuite Render : le service s'endort après 15 min sans visite (environ 1 min au réveil) et la base
+gratuite expire au bout de 30 jours.
+
 ## Écrans
 
 | URL | Pour qui | Rôle |

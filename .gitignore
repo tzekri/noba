@@ -13,3 +13,4 @@ Thumbs.db
 .idea/
 .vscode/
 *.log
+backend/src/main/resources/static/

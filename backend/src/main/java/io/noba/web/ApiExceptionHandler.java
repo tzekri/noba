@@ -12,6 +12,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @RestControllerAdvice
 public class ApiExceptionHandler {
@@ -39,6 +40,11 @@ public class ApiExceptionHandler {
 	@ExceptionHandler(AccessDeniedException.class)
 	ResponseEntity<Map<String, Object>> handleDenied(AccessDeniedException e) {
 		return body(HttpStatus.FORBIDDEN, "Accès refusé.");
+	}
+
+	@ExceptionHandler(NoResourceFoundException.class)
+	ResponseEntity<Map<String, Object>> handleNotFound(NoResourceFoundException e) {
+		return body(HttpStatus.NOT_FOUND, "Ressource introuvable.");
 	}
 
 	@ExceptionHandler(Exception.class)

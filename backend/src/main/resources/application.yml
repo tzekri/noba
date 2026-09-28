@@ -1,5 +1,7 @@
 server:
   port: ${PORT:8090}
+  # Derrière un proxy HTTPS (Render…) : utilise X-Forwarded-Proto/Host pour connaître l'URL publique.
+  forward-headers-strategy: native
 
 spring:
   application:
@@ -23,7 +25,8 @@ app:
   # Fuseau qui définit « la journée » des tickets (remise à zéro des numéros à minuit).
   timezone: ${APP_TIMEZONE:Africa/Casablanca}
   cors:
-    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5174,http://127.0.0.1:5174}
+    # RENDER_EXTERNAL_URL est fournie automatiquement par Render (URL publique du service).
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5174,http://127.0.0.1:5174},${RENDER_EXTERNAL_URL:}
   jwt:
     # À CHANGER en production (32 caractères minimum).
     secret: ${JWT_SECRET:dev-secret-change-me-please-0123456789abcdef}
