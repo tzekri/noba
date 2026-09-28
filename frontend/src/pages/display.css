@@ -1,6 +1,6 @@
 .display {
   min-height: 100vh;
-  background: #0b1716;
+  background: linear-gradient(180deg, #0b1f4b 0%, #081634 100%);
   color: #fff;
   display: flex;
   flex-direction: column;
@@ -16,7 +16,7 @@
 }
 
 .display-org {
-  color: #5eead4;
+  color: #93c5fd;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   font-weight: 700;
@@ -25,7 +25,7 @@
 
 .display-branch {
   font-size: 1.7em;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .display-clock {
@@ -57,11 +57,12 @@
   display: flex;
   align-items: center;
   gap: 0.5em;
-  background: #0f766e;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  box-shadow: 0 10px 40px rgba(37, 99, 235, 0.35);
   border-radius: 0.6em;
   padding: 0.5em 0.7em;
   font-size: min(4.6em, 7.5vw);
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.02em;
   white-space: nowrap;
 }
@@ -136,9 +137,9 @@
 }
 
 .display-queues .prefix {
-  background: rgba(94, 234, 212, 0.15);
-  color: #5eead4;
-  font-weight: 800;
+  background: rgba(147, 197, 253, 0.15);
+  color: #93c5fd;
+  font-weight: 700;
   width: 2em;
   height: 2em;
   border-radius: 0.4em;
@@ -154,7 +155,7 @@
 
 .display-queues .n {
   font-size: 1.6em;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .display-qr {
@@ -174,14 +175,18 @@
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  background: #f59e0b;
-  color: #1f1500;
+  background: #fff;
+  color: var(--brand-dark);
   border: none;
   border-radius: 999px;
   padding: 12px 24px;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 16px;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
 @media (max-width: 900px) {

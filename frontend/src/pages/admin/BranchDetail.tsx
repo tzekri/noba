@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import QRCode from "qrcode";
 import { api, errorMessage, post, put } from "../../api";
 import { Modal, QrCanvas } from "../../components/common";
+import { Icon } from "../../components/Icon";
 import type { BranchAdmin, CounterAdmin, ServiceAdmin } from "../../types";
 
 /** Configuration d'un établissement : infos, QR code, services (files) et guichets. */
@@ -189,7 +190,7 @@ export default function BranchDetail() {
             <h2>Écran d'affichage</h2>
             <p className="small muted">Ouvrez ce lien en plein écran (F11) sur la TV de la salle d'attente.</p>
             <a className="btn btn-ghost btn-sm" href={displayUrl} target="_blank" rel="noreferrer">
-              Ouvrir l'écran TV ↗
+              <Icon name="monitor" size={16} /> Ouvrir l'écran TV
             </a>
           </section>
         </aside>
@@ -250,10 +251,10 @@ async function printPoster(branch: BranchAdmin, url: string) {
   const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]!);
   w.document.write(`<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Affiche ${esc(branch.name)}</title>
 <style>
-  body{font-family:system-ui,sans-serif;text-align:center;margin:0;padding:48px 32px;color:#14201e}
+  body{font-family:system-ui,sans-serif;text-align:center;margin:0;padding:48px 32px;color:#0f172a}
   h1{font-size:44px;margin:0 0 8px} h2{font-size:24px;font-weight:500;margin:0 0 36px;color:#4a5a57}
   img{width:380px;height:380px} ol{display:inline-block;text-align:left;font-size:22px;line-height:1.8;margin-top:28px}
-  .brand{margin-top:40px;color:#0f766e;font-weight:800;font-size:20px}
+  .brand{margin-top:40px;color:#1d4ed8;font-weight:700;font-size:20px}
 </style></head><body>
   <h1>Prenez votre ticket ici</h1>
   <h2>${esc(branch.name)}</h2>
