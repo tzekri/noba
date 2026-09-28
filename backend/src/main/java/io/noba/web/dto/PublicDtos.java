@@ -1,6 +1,7 @@
 package io.noba.web.dto;
 
 import io.noba.domain.TicketStatus;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -40,6 +41,16 @@ public final class PublicDtos {
 	/** « J'ai déjà un ticket » : numéro affiché (B-042, b42…) + code de récupération. */
 	public record RecoverRequest(@NotBlank @Size(max = 10) String ticketCode,
 			@NotBlank @Pattern(regexp = "\\d{4}", message = "4 chiffres") String recoveryCode) {
+	}
+
+	/** Abonnement Web Push tel que fourni par PushSubscription.toJSON() dans le navigateur. */
+	public record PushSubscribeRequest(@NotBlank @Size(max = 1024) String endpoint, @NotNull @Valid PushKeys keys) {
+	}
+
+	public record PushKeys(@NotBlank @Size(max = 128) String p256dh, @NotBlank @Size(max = 64) String auth) {
+	}
+
+	public record PushUnsubscribeRequest(@NotBlank @Size(max = 1024) String endpoint) {
 	}
 
 	public record RatingRequest(@Min(1) @Max(5) int score) {

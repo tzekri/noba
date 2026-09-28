@@ -1,7 +1,10 @@
 package io.noba.service;
 
+import io.noba.repo.PushSubscriptionRepository;
 import io.noba.repo.TicketRepository;
 import java.time.Clock;
+import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,10 +24,12 @@ public class DailyMaintenance {
 	private static final Logger log = LoggerFactory.getLogger(DailyMaintenance.class);
 
 	private final TicketRepository tickets;
+	private final PushSubscriptionRepository pushSubscriptions;
 	private final Clock clock;
 
-	public DailyMaintenance(TicketRepository tickets, Clock clock) {
+	public DailyMaintenance(TicketRepository tickets, PushSubscriptionRepository pushSubscriptions, Clock clock) {
 		this.tickets = tickets;
+		this.pushSubscriptions = pushSubscriptions;
 		this.clock = clock;
 	}
 
@@ -36,5 +41,7 @@ public class DailyMaintenance {
 		if (expired > 0) {
 			log.info("{} ticket(s) des jours précédents marqués expirés", expired);
 		}
+		// Un ticket ne vit qu'une journée : ses abonnements push ne servent plus au-delà.
+		pushSubscriptions.deleteOlderThan(Instant.now(clock).minus(Duration.ofDays(2)));
 	}
 }

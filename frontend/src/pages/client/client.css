@@ -363,3 +363,47 @@
   color: var(--ink);
   font-variant-numeric: tabular-nums;
 }
+
+/* ---------- Encadré « Gardez cette page ouverte » / alertes activées ---------- */
+.keep-panel {
+  border-radius: 16px;
+  padding: 16px 18px;
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: 2px solid transparent;
+}
+
+.keep-panel p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.keep-title {
+  font-weight: 800;
+  font-size: 17px;
+}
+
+.keep-warn {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: #5c3a00;
+}
+
+.keep-ok {
+  background: var(--ok-soft);
+  border-color: #b7e4c7;
+  color: #14532d;
+}
+
+.keep-note {
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 10px;
+  padding: 8px 10px;
+}
+
+.keep-wake {
+  background: #fff;
+}

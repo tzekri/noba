@@ -1,9 +1,13 @@
 package io.noba.web;
 
+import io.noba.push.PushNotifier;
+import io.noba.push.VapidKeys;
 import io.noba.realtime.RealtimeHub;
 import io.noba.service.TicketingService;
 import io.noba.web.dto.PublicDtos.BranchPublicView;
 import io.noba.web.dto.PublicDtos.DisplayView;
+import io.noba.web.dto.PublicDtos.PushSubscribeRequest;
+import io.noba.web.dto.PublicDtos.PushUnsubscribeRequest;
 import io.noba.web.dto.PublicDtos.RatingRequest;
 import io.noba.web.dto.PublicDtos.RecoverRequest;
 import io.noba.web.dto.PublicDtos.TakeTicketRequest;
@@ -24,10 +28,14 @@ public class PublicController {
 
 	private final TicketingService ticketing;
 	private final RealtimeHub hub;
+	private final PushNotifier push;
+	private final VapidKeys vapidKeys;
 
-	public PublicController(TicketingService ticketing, RealtimeHub hub) {
+	public PublicController(TicketingService ticketing, RealtimeHub hub, PushNotifier push, VapidKeys vapidKeys) {
 		this.ticketing = ticketing;
 		this.hub = hub;
+		this.push = push;
+		this.vapidKeys = vapidKeys;
 	}
 
 	@GetMapping("/branches/{code}")
@@ -70,6 +78,25 @@ public class PublicController {
 	@GetMapping("/tickets/{token}")
 	public TicketView ticket(@PathVariable String token) {
 		return ticketing.ticket(token);
+	}
+
+	/** Clé publique VAPID, nécessaire au navigateur pour s'abonner au Web Push. */
+	@GetMapping("/push/key")
+	public Map<String, String> pushKey() {
+		return Map.of("publicKey", vapidKeys.publicKeyBase64Url());
+	}
+
+	/** Abonne le navigateur aux notifications de ce ticket (prévenu même page fermée). */
+	@PostMapping("/tickets/{token}/push")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void subscribePush(@PathVariable String token, @Valid @RequestBody PushSubscribeRequest request) {
+		push.subscribe(token, request);
+	}
+
+	@PostMapping("/tickets/{token}/push/unsubscribe")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void unsubscribePush(@PathVariable String token, @Valid @RequestBody PushUnsubscribeRequest request) {
+		push.unsubscribe(token, request.endpoint());
 	}
 
 	@PostMapping("/tickets/{token}/cancel")

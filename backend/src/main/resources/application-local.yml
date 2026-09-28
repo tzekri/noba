@@ -9,3 +9,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
+logging:
+  level:
+    # Trace chaque envoi Web Push (service push + code de réponse)
+    io.noba.push: DEBUG

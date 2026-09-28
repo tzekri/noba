@@ -93,15 +93,30 @@ Quelques règles clés :
 
 ## Notifications (gratuites)
 
-Elles reposent sur l'API Notification du navigateur (via le service worker, nécessaire sur Android), la
-vibration, un carillon généré en WebAudio et le titre de l'onglet. Elles fonctionnent **tant que la page
-du ticket reste ouverte**, même en arrière-plan. Le navigateur exige HTTPS pour les notifications, sauf
-sur `localhost`.
+Deux mécanismes complémentaires, sans service payant :
+
+- **Page ouverte** : carillon (WebAudio), vibration, notification locale, titre de l'onglet et écran orange à l'appel.
+- **Page fermée : Web Push.** Le client touche « Me prévenir même page fermée ». Le navigateur s'abonne
+  auprès de son service push (Google, Mozilla, Apple) et le serveur y envoie un message chiffré
+  (RFC 8291, implémentation JDK dans `io.noba.push`, sans dépendance) :
+  - « Bientôt votre tour » : une fois, à 2 personnes ou moins ;
+  - « C'est votre tour » : à l'appel ;
+  - « Rappel » : quand l'agent rappelle le ticket.
+
+  Les clés VAPID sont générées au premier démarrage et conservées en base (table `platform_keys`).
+  Les URLs d'abonnement sont limitées aux services push connus (protection contre le SSRF).
+
+Limites :
+- HTTPS obligatoire, sauf sur `localhost`.
+- Pas de Web Push en navigation privée dans Chrome.
+- Sur iPhone, uniquement si le site est ajouté à l'écran d'accueil (iOS 16.4 et plus). La page l'explique.
+
+Un encadré « Gardez cette page ouverte » s'affiche tant que les alertes page fermée ne sont pas actives,
+avec un bouton « Garder l'écran allumé » (Screen Wake Lock API).
 
 ## Feuille de route
 
-- **v2** : Web Push (VAPID) pour être prévenu page fermée, limite anti-abus sur la prise de tickets
-  (par IP ou par appareil), migrations Flyway, tests automatisés, relais Redis pour le temps réel à
-  plusieurs instances.
+- **v2** : limite anti-abus sur la prise de tickets (par IP ou par appareil), migrations Flyway, tests
+  automatisés, relais Redis pour le temps réel à plusieurs instances.
 - **v3** : réservation à distance et prise de ticket géolocalisée, horaires d'ouverture automatiques,
   multilingue FR / AR / EN, abonnements et facturation SaaS, annonce vocale sur l'écran TV.

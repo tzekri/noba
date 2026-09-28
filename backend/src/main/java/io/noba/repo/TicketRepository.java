@@ -35,6 +35,11 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 			+ "and t.status = io.noba.domain.TicketStatus.WAITING order by t.queuedAt asc")
 	List<Ticket> lockNextWaiting(Collection<Long> serviceIds, LocalDate day, Pageable pageable);
 
+	/** Tête de file d'un service (pour la notification « bientôt votre tour »). */
+	@Query("select t from Ticket t where t.service.id = :serviceId and t.day = :day "
+			+ "and t.status = io.noba.domain.TicketStatus.WAITING order by t.queuedAt asc")
+	List<Ticket> findHeadOfQueue(Long serviceId, LocalDate day, Pageable pageable);
+
 	@Query("select t from Ticket t join fetch t.service where t.branch.id = :branchId and t.day = :day "
 			+ "and t.status = io.noba.domain.TicketStatus.WAITING order by t.queuedAt asc")
 	List<Ticket> findWaiting(Long branchId, LocalDate day, Pageable pageable);
