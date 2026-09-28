@@ -60,10 +60,24 @@
   background: #0f766e;
   border-radius: 0.6em;
   padding: 0.5em 0.7em;
-  font-size: min(4.6em, 7.5vw);
+  /* Taille calée sur la largeur de la colonne (unités de conteneur) pour ne jamais déborder */
+  font-size: min(4.6em, 8cqi);
   font-weight: 800;
   letter-spacing: -0.02em;
   white-space: nowrap;
+  overflow: hidden;
+}
+
+.display-now {
+  container-type: inline-size;
+  min-width: 0;
+}
+
+.display-qr-hint {
+  margin-top: 0.6em;
+  padding-top: 0.6em;
+  border-top: 1px solid var(--line);
+  color: var(--ink-2);
 }
 
 .display-latest.empty {
@@ -81,6 +95,8 @@
 .display-latest .counter {
   margin-left: auto;
   color: #fde68a;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .flash {
@@ -189,6 +205,6 @@
     grid-template-columns: 1fr;
   }
   .display-latest {
-    font-size: 2.6em;
+    font-size: min(2.6em, 8cqi);
   }
 }

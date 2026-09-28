@@ -99,6 +99,9 @@ export default function Display() {
               <strong>Prenez votre ticket</strong>
               <br />
               Scannez avec votre téléphone et suivez la file sans attendre ici.
+              <div className="display-qr-hint">
+                Déjà un ticket ? Scannez puis touchez <strong>« J'ai déjà un ticket »</strong> avec votre numéro et votre code de suivi.
+              </div>
             </div>
           </div>
         </aside>
