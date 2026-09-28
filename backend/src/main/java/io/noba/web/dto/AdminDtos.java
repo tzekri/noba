@@ -29,7 +29,9 @@ public final class AdminDtos {
 			@Min(1) @Max(240) int defaultServiceMinutes,
 			@Min(1) Integer dailyLimit,
 			boolean active,
-			int sortOrder) {
+			int sortOrder,
+			/** À la création : affecter le service à tous les guichets actifs de l'établissement. */
+			Boolean attachToAllCounters) {
 	}
 
 	public record ServiceAdminView(Long id, String name, String description, String prefix,

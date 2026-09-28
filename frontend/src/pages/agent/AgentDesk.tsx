@@ -87,6 +87,9 @@ export default function AgentDesk() {
   const current = iHoldIt ? counter?.current : undefined;
   const myServices = board?.services.filter((s) => counter?.serviceIds.includes(s.id)) ?? [];
   const waitingForMe = myServices.reduce((sum, s) => sum + s.waiting, 0);
+  // Tickets en attente dans des services qu'aucun guichet ouvert ne traite : personne ne pourra les appeler.
+  const openServiceIds = new Set(board?.counters.filter((c) => c.agentId).flatMap((c) => c.serviceIds) ?? []);
+  const orphanServices = board?.services.filter((s) => s.waiting > 0 && !counter?.serviceIds.includes(s.id) && !openServiceIds.has(s.id)) ?? [];
 
   const callNext = () =>
     run(
@@ -242,9 +245,15 @@ export default function AgentDesk() {
                     <button className="btn btn-primary desk-next" disabled={busy || waitingForMe === 0} onClick={callNext}>
                       {current ? "Terminer et appeler le suivant" : "Appeler le suivant"}
                       <span className="desk-next-sub">
-                        {waitingForMe === 0 ? "personne en attente" : `${waitingForMe} en attente · Espace`}
+                        {waitingForMe === 0 ? "personne en attente pour ce guichet" : `${waitingForMe} en attente · Espace`}
                       </span>
                     </button>
+                    {orphanServices.length > 0 && (
+                      <div className="notice" style={{ marginTop: 12 }}>
+                        ⚠️ {orphanServices.map((s) => `${s.name} (${s.waiting})`).join(", ")} : des clients attendent, mais aucun guichet ouvert ne
+                        traite ce service. Un responsable doit l'affecter à un guichet (Établissements → Guichets).
+                      </div>
+                    )}
                   </>
                 )}
 

@@ -102,6 +102,11 @@ export default function BranchDetail() {
                       <td>{s.dailyLimit ?? "—"}</td>
                       <td>
                         <span className={`badge ${s.active ? "badge-ok" : ""}`}>{s.active ? "Actif" : "Inactif"}</span>
+                        {s.active && !counters.some((c) => c.active && c.serviceIds.includes(s.id)) && (
+                          <span className="badge badge-danger" style={{ marginLeft: 6 }} title="Les tickets de ce service ne peuvent pas être appelés">
+                            Aucun guichet
+                          </span>
+                        )}
                       </td>
                       <td style={{ textAlign: "right" }}>
                         <button className="btn btn-ghost btn-sm" onClick={() => setEditService(s)}>
@@ -307,6 +312,7 @@ function ServiceForm(props: { branchId: number; service: ServiceAdmin | null; ne
     dailyLimit: s?.dailyLimit?.toString() ?? "",
     active: s?.active ?? true,
     sortOrder: s?.sortOrder ?? props.nextOrder,
+    attachToAllCounters: true,
   });
   const [error, setError] = useState<string | null>(null);
   const set = (patch: Partial<typeof form>) => setForm((f) => ({ ...f, ...patch }));
@@ -361,6 +367,12 @@ function ServiceForm(props: { branchId: number; service: ServiceAdmin | null; ne
             Service actif
           </label>
         </div>
+        {!s && (
+          <label className="check" style={{ marginBottom: 14 }}>
+            <input type="checkbox" checked={form.attachToAllCounters} onChange={(e) => set({ attachToAllCounters: e.target.checked })} />
+            Traiter ce service à tous les guichets
+          </label>
+        )}
         <p className="small muted">La durée moyenne sert à estimer l'attente tant que l'historique du jour est insuffisant ; ensuite Noba utilise les durées réelles.</p>
         <div className="modal-actions">
           <button type="button" className="btn btn-ghost" onClick={props.onClose}>

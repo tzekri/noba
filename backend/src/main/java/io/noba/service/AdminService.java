@@ -93,8 +93,15 @@ public class AdminService {
 		Branch branch = branch(user, branchId);
 		QueueService service = new QueueService(branch, request.name().trim(), request.prefix());
 		apply(service, request);
+		services.save(service);
+		// Sans guichet, les tickets d'un service ne peuvent jamais être appelés.
+		if (!Boolean.FALSE.equals(request.attachToAllCounters())) {
+			counters.findByBranchIdOrderByName(branchId).stream()
+					.filter(Counter::isActive)
+					.forEach(c -> c.getServices().add(service));
+		}
 		hub.publishAfterCommit(branchId, QueueEvent.of("CONFIG"));
-		return view(services.save(service));
+		return view(service);
 	}
 
 	public ServiceAdminView updateService(CurrentUser user, Long id, ServiceRequest request) {
