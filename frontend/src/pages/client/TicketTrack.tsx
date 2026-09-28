@@ -2,8 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { api, errorMessage, post } from "../../api";
 import { formatTime, formatWait, Logo } from "../../components/common";
-import { alertUser, notificationsGranted, subscribePush } from "../../notify";
-import KeepOpenPanel from "./KeepOpenPanel";
+import { alertUser, notificationsGranted, notificationsSupported, requestNotifications } from "../../notify";
 import { useBranchStream } from "../../realtime";
 import type { TicketView } from "../../types";
 import "./client.css";
@@ -16,9 +15,7 @@ export default function TicketTrack() {
   const { token = "" } = useParams();
   const [ticket, setTicket] = useState<TicketView | null>(null);
   const [error, setError] = useState<string | null>(null);
-  // Web Push actif pour ce ticket : le client est prévenu même page fermée.
-  const [pushOn, setPushOn] = useState(false);
-  const pushTried = useRef(false);
+  const [notifOn, setNotifOn] = useState(notificationsGranted());
   const [dismissedCall, setDismissedCall] = useState(false);
   const [busy, setBusy] = useState(false);
   const [shared, setShared] = useState(false);
@@ -38,18 +35,11 @@ export default function TicketTrack() {
 
   useEffect(load, [load]);
 
-  // Permission déjà accordée (visite précédente) : on (ré)abonne ce navigateur à ce ticket sans rien demander.
-  useEffect(() => {
-    if (!ticket || pushTried.current || !["WAITING", "CALLED", "SERVING"].includes(ticket.status) || !notificationsGranted()) return;
-    pushTried.current = true;
-    subscribePush(token).then(setPushOn);
-  }, [ticket, token]);
-
   const live = useBranchStream(ticket?.branchCode, (event) => {
     // Rappel de notre ticket par l'agent : on sonne à nouveau.
     if (event.type === "RECALLED" && ticket && event.ticketCode === ticket.code) {
       setDismissedCall(false);
-      alertUser(`Rappel : ticket ${ticket.code}`, `Présentez-vous au ${event.counterName}`, `/t/${token}`, `noba-${ticket.code}`);
+      alertUser(`Rappel : ticket ${ticket.code}`, `Présentez-vous au ${event.counterName}`, `/t/${token}`);
     }
     load();
   });
@@ -76,13 +66,13 @@ export default function TicketTrack() {
     if (ticket.status === "WAITING" && ticket.peopleAhead !== undefined && ticket.peopleAhead <= SOON_THRESHOLD && !a.soon) {
       a.soon = true;
       if (ticket.peopleAhead > 0) {
-        alertUser("Bientôt votre tour", `Plus que ${ticket.peopleAhead} personne(s) avant vous (ticket ${ticket.code}).`, `/t/${token}`, `noba-${ticket.code}`);
+        alertUser("Bientôt votre tour", `Plus que ${ticket.peopleAhead} personne(s) avant vous (ticket ${ticket.code}).`, `/t/${token}`);
       }
     }
     if (ticket.status === "CALLED" && a.calledAt !== ticket.calledAt) {
       a.calledAt = ticket.calledAt;
       setDismissedCall(false);
-      alertUser(`C'est votre tour ! ${ticket.code}`, `Présentez-vous au ${ticket.counterName ?? "guichet"}.`, `/t/${token}`, `noba-${ticket.code}`);
+      alertUser(`C'est votre tour ! ${ticket.code}`, `Présentez-vous au ${ticket.counterName ?? "guichet"}.`, `/t/${token}`);
     }
   }, [ticket, token]);
 
@@ -125,10 +115,8 @@ export default function TicketTrack() {
     }
   }
 
-  async function enablePush() {
-    const ok = await subscribePush(token);
-    setPushOn(ok);
-    return ok;
+  async function enableNotifications() {
+    setNotifOn(await requestNotifications());
   }
 
   async function cancel() {
@@ -262,9 +250,17 @@ export default function TicketTrack() {
         </div>
       </div>
 
-      {ticket.status === "WAITING" && <KeepOpenPanel pushOn={pushOn} onEnablePush={enablePush} />}
-
       <div className="client-actions">
+        {ticket.status === "WAITING" && notificationsSupported() && !notifOn && (
+          <button className="btn btn-accent btn-lg" onClick={enableNotifications}>
+            🔔 Me prévenir quand c'est mon tour
+          </button>
+        )}
+        {ticket.status === "WAITING" && notifOn && (
+          <div className="notice" style={{ textAlign: "center", background: "var(--ok-soft)", color: "var(--ok)" }}>
+            Notifications activées. Gardez cette page ouverte : votre téléphone sonnera et vibrera.
+          </div>
+        )}
         {ticket.status === "WAITING" && (
           <>
             <button className="btn btn-ghost" onClick={share}>

@@ -7,7 +7,6 @@ import io.noba.domain.Role;
 import io.noba.domain.StaffUser;
 import io.noba.domain.Ticket;
 import io.noba.domain.TicketStatus;
-import io.noba.push.PushNotifier;
 import io.noba.realtime.QueueEvent;
 import io.noba.realtime.RealtimeHub;
 import io.noba.repo.BranchRepository;
@@ -47,12 +46,10 @@ public class CounterDeskService {
 	private final StaffUserRepository staff;
 	private final WaitEstimator estimator;
 	private final RealtimeHub hub;
-	private final PushNotifier push;
 	private final Clock clock;
 
 	public CounterDeskService(BranchRepository branches, CounterRepository counters, QueueServiceRepository services,
-			TicketRepository tickets, StaffUserRepository staff, WaitEstimator estimator, RealtimeHub hub,
-			PushNotifier push, Clock clock) {
+			TicketRepository tickets, StaffUserRepository staff, WaitEstimator estimator, RealtimeHub hub, Clock clock) {
 		this.branches = branches;
 		this.counters = counters;
 		this.services = services;
@@ -60,7 +57,6 @@ public class CounterDeskService {
 		this.staff = staff;
 		this.estimator = estimator;
 		this.hub = hub;
-		this.push = push;
 		this.clock = clock;
 	}
 
@@ -161,8 +157,6 @@ public class CounterDeskService {
 		ticket.setCounter(counter);
 		ticket.setAgent(counter.getCurrentAgent());
 		hub.publishAfterCommit(counter.getBranch().getId(), new QueueEvent("CALLED", ticket.getCode(), counter.getName()));
-		push.ticketCalled(ticket);
-		push.queueAdvanced(ticket.getService().getId(), ticket.getDay());
 		return Views.agentTicket(ticket);
 	}
 
@@ -171,7 +165,6 @@ public class CounterDeskService {
 		ticket.setRecallCount(ticket.getRecallCount() + 1);
 		hub.publishAfterCommit(ticket.getBranch().getId(),
 				new QueueEvent("RECALLED", ticket.getCode(), ticket.getCounter().getName()));
-		push.ticketRecalled(ticket);
 		return Views.agentTicket(ticket);
 	}
 
@@ -205,18 +198,13 @@ public class CounterDeskService {
 		QueueService target = services.findById(serviceId)
 				.filter(s -> s.getBranch().getId().equals(ticket.getBranch().getId()) && s.isActive())
 				.orElseThrow(() -> ApiException.notFound("Service introuvable."));
-		Long previousService = ticket.getService().getId();
 		ticket.setService(target);
 		ticket.setStatus(TicketStatus.WAITING);
 		ticket.setCounter(null);
 		ticket.setAgent(null);
 		ticket.setCalledAt(null);
 		ticket.setStartedAt(null);
-		// Nouvelle file : le client sera de nouveau prévenu à l'approche de son tour.
-		ticket.setSoonNotified(false);
 		hub.publishAfterCommit(ticket.getBranch().getId(), new QueueEvent("TRANSFERRED", ticket.getCode(), null));
-		push.queueAdvanced(previousService, ticket.getDay());
-		push.queueAdvanced(target.getId(), ticket.getDay());
 		return Views.agentTicket(ticket);
 	}
 

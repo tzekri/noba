@@ -34,8 +34,5 @@ app:
   super-admin:
     email: ${SUPER_ADMIN_EMAIL:super@noba.io}
     password: ${SUPER_ADMIN_PASSWORD:super1234}
-  push:
-    # Contact de l'opérateur transmis aux services push (exigé par Apple et Mozilla).
-    subject: ${PUSH_SUBJECT:mailto:contact@noba.io}
   # Crée une organisation de démonstration au démarrage si la base est vide.
   seed-demo: ${SEED_DEMO:true}

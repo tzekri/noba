@@ -5,7 +5,6 @@ import io.noba.domain.QueueService;
 import io.noba.domain.StaffUser;
 import io.noba.domain.Ticket;
 import io.noba.domain.TicketStatus;
-import io.noba.push.PushNotifier;
 import io.noba.realtime.QueueEvent;
 import io.noba.realtime.RealtimeHub;
 import io.noba.repo.BranchRepository;
@@ -49,13 +48,11 @@ public class TicketingService {
 	private final WaitEstimator estimator;
 	private final RecoveryThrottle throttle;
 	private final RealtimeHub hub;
-	private final PushNotifier push;
 	private final Clock clock;
 
 	public TicketingService(BranchRepository branches, QueueServiceRepository services, TicketRepository tickets,
 			StaffUserRepository staff, TicketNumberAllocator numbers, WaitEstimator estimator, RecoveryThrottle throttle,
-			RealtimeHub hub, PushNotifier push, Clock clock) {
-		this.push = push;
+			RealtimeHub hub, Clock clock) {
 		this.branches = branches;
 		this.services = services;
 		this.tickets = tickets;
@@ -175,7 +172,6 @@ public class TicketingService {
 		ticket.setStatus(TicketStatus.CANCELLED);
 		ticket.setCompletedAt(Instant.now(clock));
 		hub.publishAfterCommit(ticket.getBranch().getId(), new QueueEvent("CANCELLED", ticket.getCode(), null));
-		push.queueAdvanced(ticket.getService().getId(), ticket.getDay());
 		return view(ticket);
 	}
 

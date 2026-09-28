@@ -77,10 +77,6 @@ public class Ticket {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private StaffUser issuedBy;
 
-	/** Notification push « bientôt votre tour » déjà envoyée (une seule par ticket). */
-	@Column(nullable = false)
-	private boolean soonNotified;
-
 	private static final SecureRandom RANDOM = new SecureRandom();
 
 	protected Ticket() {
@@ -127,6 +123,4 @@ public class Ticket {
 	public String getRecoveryCode() { return recoveryCode; }
 	public StaffUser getIssuedBy() { return issuedBy; }
 	public void setIssuedBy(StaffUser issuedBy) { this.issuedBy = issuedBy; }
-	public boolean isSoonNotified() { return soonNotified; }
-	public void setSoonNotified(boolean soonNotified) { this.soonNotified = soonNotified; }
 }
