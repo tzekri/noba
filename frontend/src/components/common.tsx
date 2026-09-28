@@ -76,7 +76,7 @@ export function Modal({ title, onClose, children }: { title: string; onClose: ()
   );
 }
 
-export function QrCanvas({ value, size = 200, dark = "#0f172a" }: { value: string; size?: number; dark?: string }) {
+export function QrCanvas({ value, size = 200, dark = "#14201e" }: { value: string; size?: number; dark?: string }) {
   const ref = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
     if (ref.current) {

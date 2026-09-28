@@ -2,7 +2,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { api, errorMessage, post } from "../../api";
 import { formatTime, formatWait, Logo } from "../../components/common";
-import { Icon } from "../../components/Icon";
 import { alertUser, notificationsGranted, notificationsSupported, requestNotifications } from "../../notify";
 import { useBranchStream } from "../../realtime";
 import type { TicketView } from "../../types";
@@ -166,7 +165,7 @@ export default function TicketTrack() {
           {ticket.status === "WAITING" && (
             <>
               {ahead === 0 ? (
-                <div style={{ textAlign: "center", fontSize: 22, fontWeight: 700, color: "var(--brand)" }}>Vous êtes le prochain !</div>
+                <div style={{ textAlign: "center", fontSize: 22, fontWeight: 800, color: "var(--brand)" }}>Vous êtes le prochain !</div>
               ) : (
                 <div className="ahead">
                   <span className="n">{ahead}</span>
@@ -191,14 +190,14 @@ export default function TicketTrack() {
 
           {(ticket.status === "CALLED" || ticket.status === "SERVING") && (
             <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: 20, fontWeight: 700 }}>{ticket.status === "CALLED" ? "C'est votre tour !" : "Vous êtes en cours de traitement"}</div>
-              <div style={{ fontSize: 28, fontWeight: 700, color: "var(--brand)", marginTop: 6 }}>{ticket.counterName}</div>
+              <div style={{ fontSize: 20, fontWeight: 800 }}>{ticket.status === "CALLED" ? "C'est votre tour !" : "Vous êtes en cours de traitement"}</div>
+              <div style={{ fontSize: 28, fontWeight: 800, color: "var(--brand)", marginTop: 6 }}>{ticket.counterName}</div>
             </div>
           )}
 
           {ticket.status === "DONE" && (
             <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: 20, fontWeight: 700 }}>Merci de votre visite !</div>
+              <div style={{ fontSize: 20, fontWeight: 800 }}>Merci de votre visite !</div>
               {ticket.rating ? (
                 <p className="muted">Merci pour votre avis ({ticket.rating}/5).</p>
               ) : (
@@ -218,7 +217,7 @@ export default function TicketTrack() {
 
           {ticket.status === "NO_SHOW" && (
             <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: 18, fontWeight: 700 }}>Vous avez été appelé mais vous étiez absent.</div>
+              <div style={{ fontSize: 18, fontWeight: 800 }}>Vous avez été appelé mais vous étiez absent.</div>
               <p className="muted">Vous pouvez reprendre un nouveau ticket.</p>
             </div>
           )}
@@ -230,7 +229,7 @@ export default function TicketTrack() {
       <div className="client-actions">
         {ticket.status === "WAITING" && notificationsSupported() && !notifOn && (
           <button className="btn btn-accent btn-lg" onClick={enableNotifications}>
-            <Icon name="bell" /> Me prévenir quand c'est mon tour
+            🔔 Me prévenir quand c'est mon tour
           </button>
         )}
         {ticket.status === "WAITING" && notifOn && (

@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from "react";
 import { api, errorMessage, post } from "../../api";
 import { useAuth } from "../../auth";
 import { formatTime, formatWait, minutesSince, StaffHeader, staffLinks, StatusBadge } from "../../components/common";
-import { Icon } from "../../components/Icon";
 import { useBranchStream } from "../../realtime";
 import type { AgentTicket, BoardView, BranchSummary } from "../../types";
 import "./agent.css";
@@ -200,21 +199,21 @@ export default function AgentDesk() {
                             {current.status === "CALLED" && (
                               <>
                                 <button className="btn btn-ghost" disabled={busy} onClick={() => ticketAction("recall")}>
-                                  <Icon name="bell" /> Rappeler
+                                  🔔 Rappeler
                                 </button>
                                 <button className="btn btn-ghost" disabled={busy} onClick={() => ticketAction("start")}>
-                                  <Icon name="play" /> Client présent
+                                  ▶ Client présent
                                 </button>
                                 <button className="btn btn-danger" disabled={busy} onClick={() => ticketAction("no-show")}>
-                                  <Icon name="userX" /> Absent
+                                  Absent
                                 </button>
                               </>
                             )}
                             <button className="btn btn-ghost" disabled={busy} onClick={() => setTransferOpen((o) => !o)}>
-                              <Icon name="swap" /> Transférer
+                              ⇄ Transférer
                             </button>
                             <button className="btn btn-ghost" disabled={busy} onClick={() => ticketAction("complete")}>
-                              <Icon name="check" /> Terminer
+                              ✓ Terminer
                             </button>
                           </div>
                           {transferOpen && (
@@ -250,12 +249,9 @@ export default function AgentDesk() {
                       </span>
                     </button>
                     {orphanServices.length > 0 && (
-                      <div className="notice" style={{ marginTop: 12, display: "flex", gap: 10, alignItems: "flex-start" }}>
-                        <Icon name="alert" />
-                        <span>
-                          {orphanServices.map((s) => `${s.name} (${s.waiting})`).join(", ")} : des clients attendent, mais aucun guichet ouvert ne
-                          traite ce service. Un responsable doit l'affecter à un guichet (Établissements → Guichets).
-                        </span>
+                      <div className="notice" style={{ marginTop: 12 }}>
+                        ⚠️ {orphanServices.map((s) => `${s.name} (${s.waiting})`).join(", ")} : des clients attendent, mais aucun guichet ouvert ne
+                        traite ce service. Un responsable doit l'affecter à un guichet (Établissements → Guichets).
                       </div>
                     )}
                   </>

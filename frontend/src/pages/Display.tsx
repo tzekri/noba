@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { api, errorMessage } from "../api";
 import { QrCanvas } from "../components/common";
-import { Icon } from "../components/Icon";
 import { playChime, useBranchStream } from "../realtime";
 import type { DisplayView } from "../types";
 import "./display.css";
@@ -107,7 +106,7 @@ export default function Display() {
 
       {!soundOn && (
         <button className="display-sound" onClick={() => { setSoundOn(true); playChime(); }}>
-          <Icon name="volume" /> Cliquer pour activer le son des appels
+          🔈 Cliquer pour activer le son des appels
         </button>
       )}
     </div>
