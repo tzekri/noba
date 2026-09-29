@@ -3,7 +3,7 @@ import { api, errorMessage, patch } from "../../api";
 import { StaffHeader } from "../../components/common";
 import type { OrganizationAdmin } from "../../types";
 
-/** Console de l'opérateur Noba : organisations clientes de la plateforme. */
+/** Console de l'opérateur Nobty : organisations clientes de la plateforme. */
 export default function SuperOrgs() {
   const [orgs, setOrgs] = useState<OrganizationAdmin[] | null>(null);
   const [error, setError] = useState<string | null>(null);

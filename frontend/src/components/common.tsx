@@ -8,7 +8,7 @@ export function Logo({ to = "/", light = false }: { to?: string; light?: boolean
   return (
     <Link to={to} className="logo" style={light ? { color: "#fff" } : undefined}>
       <img src="/icon.svg" alt="" className="logo-mark" />
-      noba
+      nobty
     </Link>
   );
 }

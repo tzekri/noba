@@ -238,7 +238,7 @@ async function downloadQr(branch: BranchAdmin, url: string) {
   const dataUrl = await QRCode.toDataURL(url, { width: 1024, margin: 2 });
   const a = document.createElement("a");
   a.href = dataUrl;
-  a.download = `noba-qr-${branch.code}.png`;
+  a.download = `nobty-qr-${branch.code}.png`;
   a.click();
 }
 
@@ -259,7 +259,7 @@ async function printPoster(branch: BranchAdmin, url: string) {
   <h2>${esc(branch.name)}</h2>
   <img src="${dataUrl}" alt="QR code">
   <div><ol><li>Scannez le QR code avec votre téléphone</li><li>Choisissez votre service</li><li>Suivez votre tour en direct, installez-vous !</li></ol></div>
-  <div class="brand">noba</div>
+  <div class="brand">nobty</div>
   <script>window.onload=()=>setTimeout(()=>window.print(),300)</script>
 </body></html>`);
   w.document.close();
@@ -373,7 +373,7 @@ function ServiceForm(props: { branchId: number; service: ServiceAdmin | null; ne
             Traiter ce service à tous les guichets
           </label>
         )}
-        <p className="small muted">La durée moyenne sert à estimer l'attente tant que l'historique du jour est insuffisant ; ensuite Noba utilise les durées réelles.</p>
+        <p className="small muted">La durée moyenne sert à estimer l'attente tant que l'historique du jour est insuffisant ; ensuite Nobty utilise les durées réelles.</p>
         <div className="modal-actions">
           <button type="button" className="btn btn-ghost" onClick={props.onClose}>
             Annuler

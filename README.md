@@ -1,4 +1,4 @@
-# Noba — gestion de files d'attente (SaaS)
+# Nobty — gestion de files d'attente (SaaS)
 
 Le client scanne un QR code à l'entrée d'un établissement, choisit un service, reçoit un ticket sur son
 téléphone et suit sa position en temps réel. Il n'a besoin ni d'application ni de compte. L'agent appelle

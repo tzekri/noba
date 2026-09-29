@@ -86,7 +86,7 @@ export default function TicketTrack() {
           ? ticket.peopleAhead === 0
             ? `Vous êtes le prochain · ${ticket.code}`
             : `${ticket.peopleAhead} avant vous · ${ticket.code}`
-          : `${ticket.code} · Noba`;
+          : `${ticket.code} · Nobty`;
     document.title = title;
   }, [ticket]);
 
@@ -292,7 +292,7 @@ export default function TicketTrack() {
         </div>
       )}
 
-      <div className="client-footer">Propulsé par Noba</div>
+      <div className="client-footer">Propulsé par Nobty</div>
     </div>
   );
 }

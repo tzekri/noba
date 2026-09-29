@@ -108,7 +108,7 @@ export default function Landing() {
 
       <footer className="landing-footer container">
         <Logo />
-        <span className="muted small">© {new Date().getFullYear()} Noba — Gestion de files d'attente</span>
+        <span className="muted small">© {new Date().getFullYear()} Nobty — Gestion de files d'attente</span>
       </footer>
     </div>
   );

@@ -12,6 +12,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.async.AsyncRequestNotUsableException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @RestControllerAdvice
@@ -40,6 +41,15 @@ public class ApiExceptionHandler {
 	@ExceptionHandler(AccessDeniedException.class)
 	ResponseEntity<Map<String, Object>> handleDenied(AccessDeniedException e) {
 		return body(HttpStatus.FORBIDDEN, "Accès refusé.");
+	}
+
+	/**
+	 * Client parti (onglet fermé, téléphone en veille) pendant un flux temps réel : rien à répondre,
+	 * la connexion n'existe plus. Écrire un corps JSON sur un flux text/event-stream échouerait.
+	 */
+	@ExceptionHandler(AsyncRequestNotUsableException.class)
+	void handleClientGone(AsyncRequestNotUsableException e) {
+		log.debug("Client déconnecté : {}", e.getMessage());
 	}
 
 	@ExceptionHandler(NoResourceFoundException.class)

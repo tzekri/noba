@@ -77,7 +77,7 @@ public class DataSeeder implements ApplicationRunner {
 	@Transactional
 	public void run(ApplicationArguments args) {
 		if (!staff.existsByEmailIgnoreCase(superEmail)) {
-			staff.save(new StaffUser(null, null, superEmail, passwordEncoder.encode(superPassword), "Opérateur Noba",
+			staff.save(new StaffUser(null, null, superEmail, passwordEncoder.encode(superPassword), "Opérateur Nobty",
 					Role.SUPER_ADMIN));
 			log.info("Super-admin créé : {}", superEmail);
 		}

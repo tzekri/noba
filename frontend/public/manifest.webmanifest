@@ -1,6 +1,6 @@
 {
-  "name": "Noba",
-  "short_name": "Noba",
+  "name": "Nobty",
+  "short_name": "Nobty",
   "description": "Prenez un ticket et suivez la file d'attente sur votre téléphone.",
   "start_url": "/",
   "display": "standalone",

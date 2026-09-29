@@ -1,7 +1,7 @@
 package io.noba.domain;
 
 public enum Role {
-	/** Opérateur de la plateforme Noba (toutes organisations). */
+	/** Opérateur de la plateforme Nobty (toutes organisations). */
 	SUPER_ADMIN,
 	/** Responsable d'une organisation cliente (tous ses établissements). */
 	ORG_ADMIN,

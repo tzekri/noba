@@ -31,7 +31,7 @@ export default function Register() {
     <div className="auth-page">
       <div className="auth-card card">
         <Logo />
-        <h1 style={{ fontSize: 24, marginTop: 20 }}>Créez votre espace Noba</h1>
+        <h1 style={{ fontSize: 24, marginTop: 20 }}>Créez votre espace Nobty</h1>
         <p className="muted small" style={{ marginTop: -4 }}>
           Un établissement, un service et un guichet sont créés automatiquement : vous pourrez délivrer votre premier ticket dans une minute.
         </p>

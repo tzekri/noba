@@ -145,7 +145,7 @@ export default function TakeTicket() {
 
       {!existing && <RecoverTicket branchCode={code} onFound={(t) => { rememberTicket(code, t.token); navigate(`/t/${t.token}`); }} />}
 
-      <div className="client-footer">Propulsé par Noba</div>
+      <div className="client-footer">Propulsé par Nobty</div>
     </div>
   );
 }
