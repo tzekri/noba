@@ -81,8 +81,24 @@ public class DataSeeder implements ApplicationRunner {
 					Role.SUPER_ADMIN));
 			log.info("Super-admin créé : {}", superEmail);
 		}
+		renameLegacyDemoAccounts();
 		if (seedDemo && organizations.count() == 0) {
 			seedDemo();
+		}
+	}
+
+	/**
+	 * Passage de la marque Noba à Nobty : les comptes de démo déjà créés (base existante, ex. Render)
+	 * gardaient l'ancien domaine. Renommage idempotent, mots de passe inchangés.
+	 */
+	private void renameLegacyDemoAccounts() {
+		for (String user : List.of("admin", "agent", "agent2")) {
+			String legacy = user + "@demo.noba";
+			String current = user + "@demo.nobty.ma";
+			if (staff.existsByEmailIgnoreCase(legacy) && !staff.existsByEmailIgnoreCase(current)) {
+				staff.renameEmail(legacy, current);
+				log.info("Compte de démo renommé : {} → {}", legacy, current);
+			}
 		}
 	}
 
@@ -95,16 +111,16 @@ public class DataSeeder implements ApplicationRunner {
 		QueueService claims = service(branch, "Réclamations", "C", "Litiges et contestations", 8, 3);
 
 		String hash = passwordEncoder.encode(DEMO_PASSWORD);
-		staff.save(new StaffUser(org, null, "admin@demo.noba", hash, "Salma Bennani", Role.ORG_ADMIN));
-		StaffUser agent1 = staff.save(new StaffUser(org, branch, "agent@demo.noba", hash, "Youssef Alaoui", Role.AGENT));
-		StaffUser agent2 = staff.save(new StaffUser(org, branch, "agent2@demo.noba", hash, "Nadia Tazi", Role.AGENT));
+		staff.save(new StaffUser(org, null, "admin@demo.nobty.ma", hash, "Salma Bennani", Role.ORG_ADMIN));
+		StaffUser agent1 = staff.save(new StaffUser(org, branch, "agent@demo.nobty.ma", hash, "Youssef Alaoui", Role.AGENT));
+		StaffUser agent2 = staff.save(new StaffUser(org, branch, "agent2@demo.nobty.ma", hash, "Nadia Tazi", Role.AGENT));
 
 		Counter g1 = counter(branch, "Guichet 1", withdraw, account);
 		counter(branch, "Guichet 2", withdraw);
 		counter(branch, "Guichet 3", account, claims);
 
 		seedTodayHistory(branch, List.of(withdraw, account, claims), g1, List.of(agent1, agent2));
-		log.info("Organisation de démo créée : établissement « demo », comptes admin@demo.noba / agent@demo.noba (mot de passe {})",
+		log.info("Organisation de démo créée : établissement « demo », comptes admin@demo.nobty.ma / agent@demo.nobty.ma (mot de passe {})",
 				DEMO_PASSWORD);
 	}
 

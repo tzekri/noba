@@ -45,7 +45,7 @@ export default function Landing() {
             </Link>
           </div>
           <p className="small muted">
-            Démo : <Link to="/display/demo">écran TV</Link> · <Link to="/login">guichet agent</Link> (agent@demo.noba / demo1234)
+            Démo : <Link to="/display/demo">écran TV</Link> · <Link to="/login">guichet agent</Link> (agent@demo.nobty.ma / demo1234)
           </p>
         </div>
 

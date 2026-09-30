@@ -32,7 +32,7 @@ app:
     secret: ${JWT_SECRET:dev-secret-change-me-please-0123456789abcdef}
     validity-hours: ${JWT_VALIDITY_HOURS:12}
   super-admin:
-    email: ${SUPER_ADMIN_EMAIL:super@noba.io}
+    email: ${SUPER_ADMIN_EMAIL:super@nobty.ma}
     password: ${SUPER_ADMIN_PASSWORD:super1234}
   # Crée une organisation de démonstration au démarrage si la base est vide.
   seed-demo: ${SEED_DEMO:true}

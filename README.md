@@ -67,9 +67,9 @@ gratuite expire au bout de 30 jours.
 
 | Rôle | E-mail | Mot de passe |
 |---|---|---|
-| Responsable | `admin@demo.noba` | `demo1234` |
-| Agent | `agent@demo.noba`, `agent2@demo.noba` | `demo1234` |
-| Super-admin | `super@noba.io` | `super1234` |
+| Responsable | `admin@demo.nobty.ma` | `demo1234` |
+| Agent | `agent@demo.nobty.ma`, `agent2@demo.nobty.ma` | `demo1234` |
+| Super-admin | `super@nobty.ma` | `super1234` |
 
 Code public de l'établissement de démo : `demo`, soit `/q/demo` et `/display/demo`.
 

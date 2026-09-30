@@ -31,7 +31,7 @@ services:
       CORS_ALLOWED_ORIGINS: http://localhost:5174,http://127.0.0.1:5174
       # À CHANGER en production (32 caractères minimum)
       JWT_SECRET: dev-secret-change-me-please-0123456789abcdef
-      SUPER_ADMIN_EMAIL: super@noba.io
+      SUPER_ADMIN_EMAIL: super@nobty.ma
       SUPER_ADMIN_PASSWORD: super1234
       SEED_DEMO: "true"
     ports:

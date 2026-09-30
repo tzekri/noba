@@ -58,10 +58,10 @@ export default function Login() {
           <summary>Comptes de démonstration</summary>
           <ul>
             <li>
-              Responsable : <code>admin@demo.noba</code>
+              Responsable : <code>admin@demo.nobty.ma</code>
             </li>
             <li>
-              Agent : <code>agent@demo.noba</code>
+              Agent : <code>agent@demo.nobty.ma</code>
             </li>
             <li>
               Mot de passe : <code>demo1234</code>
